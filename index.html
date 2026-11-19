@@ -1,0 +1,748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Study Hub: Unit 5</title>
+<style>
+:root{
+  --blue:#4B9CD3; --blue-d:#2A6F9E; --blue-l:#E8F3FB;
+  --orange:#F56600; --orange-d:#C24F00; --orange-l:#FFF1E6;
+  --navy:#13294B; --ink:#1d2533; --muted:#5b6678;
+  --bg:#f4f7fb; --card:#ffffff; --line:#d9e2ec;
+  --good:#1f8a4c; --good-l:#e4f5eb; --bad:#c0392b; --bad-l:#fbe9e7;
+  --g0:#4B9CD3; --g1:#F56600; --g2:#13294B; --g3:#9aa6b6;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --navy:#cfe4f6; --ink:#e7ecf3; --muted:#a6b0bf; --bg:#0f1620; --card:#18212e; --line:#2b3748;
+    --blue-l:#16324a; --orange-l:#3a2415; --good-l:#163526; --bad-l:#3b1d1b; --g2:#cfe4f6; --g3:#6b788a;
+  }
+}
+:root[data-theme="dark"]{
+  --navy:#cfe4f6; --ink:#e7ecf3; --muted:#a6b0bf; --bg:#0f1620; --card:#18212e; --line:#2b3748;
+  --blue-l:#16324a; --orange-l:#3a2415; --good-l:#163526; --bad-l:#3b1d1b; --g2:#cfe4f6; --g3:#6b788a;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font-family:"Segoe UI",system-ui,-apple-system,Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);line-height:1.55;font-size:16px}
+.xb{text-decoration:overline}
+header{background:linear-gradient(120deg,#13294B 0%,#1d3d6b 55%,#2A6F9E 100%);color:#fff;padding:22px 16px 18px}
+.wrap{max-width:1150px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:10px;font-size:13px;letter-spacing:.08em;text-transform:uppercase;color:#cfe4f6;font-weight:600}
+.brand .dot{width:10px;height:10px;border-radius:50%;background:var(--orange)}
+h1{margin:6px 0 4px;font-size:clamp(26px,4vw,36px);line-height:1.15}
+.sub{color:#dbe9f5;margin:0;font-size:15px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:12px}
+.chip{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.25);padding:2px 10px;border-radius:999px;font-size:12.5px}
+.overall{margin-top:14px;display:flex;align-items:center;gap:12px;font-size:13.5px;color:#dbe9f5}
+.bar{flex:1;max-width:340px;height:9px;background:rgba(255,255,255,.18);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;background:var(--orange);width:0;transition:width .4s}
+nav.tabs{position:sticky;top:0;z-index:5;background:var(--card);border-bottom:1px solid var(--line)}
+nav.tabs .wrap{display:flex;gap:4px;overflow-x:auto;padding:0 12px}
+nav.tabs button{flex:none;border:0;background:none;color:var(--muted);font:inherit;font-weight:600;padding:13px 14px;border-bottom:3px solid transparent;cursor:pointer}
+nav.tabs button[aria-selected="true"]{color:var(--navy);border-bottom-color:var(--orange)}
+main{padding:20px 16px 60px}
+.view{display:none}.view.on{display:block}
+.layout{display:grid;grid-template-columns:270px 1fr;gap:20px;align-items:start}
+aside{position:sticky;top:62px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:8px}
+.topic{display:block;width:100%;text-align:left;border:0;background:none;font:inherit;color:var(--ink);padding:10px 12px;border-radius:10px;cursor:pointer}
+.topic:hover{background:var(--blue-l)}
+.topic[aria-current="true"]{background:var(--blue-l);box-shadow:inset 3px 0 0 var(--blue)}
+.topic .t{font-weight:600;font-size:14.5px;display:block}
+.topic .m{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:8px;margin-top:3px}
+.mini{flex:1;height:5px;background:var(--line);border-radius:9px;overflow:hidden}
+.mini>i{display:block;height:100%;background:var(--blue);width:0}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px}
+.panel h2{margin:0 0 4px;color:var(--navy);font-size:24px;line-height:1.2}
+.ced{color:var(--muted);font-size:13.5px;margin:0 0 14px}
+.subtabs{display:inline-flex;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:3px;gap:3px;margin-bottom:18px}
+.subtabs button{border:0;background:none;font:inherit;font-weight:600;font-size:14px;padding:7px 14px;border-radius:8px;color:var(--muted);cursor:pointer}
+.subtabs button[aria-selected="true"]{background:var(--card);color:var(--navy);box-shadow:0 1px 3px rgba(0,0,0,.12)}
+.review h3{color:var(--navy);font-size:17px;margin:20px 0 6px}
+.review ul{margin:6px 0;padding-left:20px}.review li{margin:4px 0}
+.vocab{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:8px 0}
+.vocab div{border:1px solid var(--line);border-radius:10px;padding:10px 12px;background:var(--bg)}
+.vocab b{display:block;color:var(--blue-d)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .vocab b{color:#8cc4ea}}
+.callout{border-radius:12px;padding:12px 14px;margin:14px 0;font-size:15px}
+.callout.tip{background:var(--blue-l);border-left:4px solid var(--blue)}
+.callout.warn{background:var(--orange-l);border-left:4px solid var(--orange)}
+.callout strong:first-child{display:block;margin-bottom:2px}
+.formula{font-family:"Cambria Math",Cambria,Georgia,serif;font-size:17px;background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block;margin:4px 0}
+.q{border:1px solid var(--line);border-radius:14px;padding:16px;margin:0 0 16px;background:var(--card)}
+.q .qh{display:flex;justify-content:space-between;gap:10px;font-size:12.5px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.q .tag{color:var(--orange-d)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .q .tag{color:#ff9a57}}
+.q p.stem{margin:0 0 10px}
+.opts{display:grid;gap:8px;margin-top:10px}
+.opt{display:flex;gap:10px;align-items:flex-start;text-align:left;width:100%;border:1.5px solid var(--line);background:var(--card);color:var(--ink);font:inherit;padding:10px 12px;border-radius:10px;cursor:pointer}
+.opt:hover:not([disabled]){border-color:var(--blue)}
+.opt .L{flex:none;width:24px;height:24px;border-radius:50%;background:var(--bg);border:1px solid var(--line);display:grid;place-items:center;font-weight:700;font-size:13px}
+.opt.right{border-color:var(--good);background:var(--good-l)}
+.opt.wrong{border-color:var(--bad);background:var(--bad-l)}
+.opt[disabled]{cursor:default}
+.fb{margin-top:10px;border-radius:10px;padding:10px 12px;font-size:15px;display:none}
+.fb.show{display:block}
+.fb.ok{background:var(--good-l);border-left:4px solid var(--good)}
+.fb.no{background:var(--bad-l);border-left:4px solid var(--bad)}
+.btn{border:1.5px solid var(--blue);background:var(--card);color:var(--blue-d);font:inherit;font-weight:600;font-size:14px;padding:7px 14px;border-radius:9px;cursor:pointer}
+.btn.solid{background:var(--orange);border-color:var(--orange);color:#fff}
+.btn.solid:hover{background:var(--orange-d)}
+.btn:hover{filter:brightness(.97)}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .btn:not(.solid){color:#8cc4ea}}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}
+textarea{width:100%;min-height:110px;border:1.5px solid var(--line);border-radius:10px;padding:10px;font:inherit;background:var(--bg);color:var(--ink);resize:vertical}
+textarea:focus,input:focus{outline:2px solid var(--blue);outline-offset:1px}
+.model{display:none;margin-top:12px;border:1px dashed var(--blue);border-radius:12px;padding:12px 14px;background:var(--blue-l)}
+.model.show{display:block}
+.model h4{margin:0 0 6px;color:var(--navy)}
+.check label{display:flex;gap:8px;align-items:flex-start;margin:4px 0;font-size:15px}
+figure{margin:10px 0;overflow-x:auto}
+svg.fig{width:100%;max-width:640px;height:auto;display:block}
+svg .ax{stroke:var(--ink);stroke-width:1.2}
+svg .faint{stroke:var(--line)}
+svg .tk{fill:var(--muted);font-size:12px}
+svg .lab{fill:var(--ink);font-size:13px;font-weight:600}
+svg .dot{stroke:none}
+svg .d0{fill:var(--g0)} svg .d1{fill:var(--g1)}
+svg .box{fill:var(--blue-l);stroke:var(--ink);stroke-width:1.4}
+svg .wh{stroke:var(--ink);stroke-width:1.4}
+svg .med{stroke:var(--orange);stroke-width:3}
+table.tw{border-collapse:collapse;margin:8px 0;font-size:15px;min-width:320px}
+table.tw th,table.tw td{border:1px solid var(--line);padding:6px 12px;text-align:center}
+table.tw thead th{background:var(--blue-l)}
+table.tw tbody th{background:var(--bg);text-align:left}
+table.tw .tot{font-weight:700;background:var(--bg)}
+.leafplot{font-family:Consolas,Menlo,monospace;font-size:16px;display:inline-block;border:1px solid var(--line);border-radius:10px;padding:10px 16px;background:var(--bg)}
+.srow{display:flex}.srow .st{width:28px;text-align:right;padding-right:8px;border-right:2px solid var(--ink);margin-right:8px}
+.key{font-family:inherit;font-size:13px;color:var(--muted);margin-top:6px}
+.scorebox{display:flex;align-items:center;gap:14px;flex-wrap:wrap;background:var(--blue-l);border-radius:12px;padding:12px 14px;margin-bottom:16px}
+.scorebox .big{font-size:26px;font-weight:800;color:var(--navy)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.out table{border-collapse:collapse;width:100%;font-size:15px}
+.out td{padding:6px 8px;border-bottom:1px solid var(--line)}
+.out td:last-child{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+input[type=number]{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.field label{display:block;font-size:13.5px;font-weight:600;margin:8px 0 3px}
+.ref{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px}
+.ref .panel h3{margin:0 0 8px;color:var(--navy);font-size:18px}
+.ref ul{padding-left:20px;margin:6px 0}
+.mobile-pick{display:none;margin-bottom:12px}
+.mobile-pick select{width:100%;font:inherit;padding:10px;border-radius:10px;border:1.5px solid var(--line);background:var(--card);color:var(--ink)}
+.foot{color:var(--muted);font-size:12.5px;text-align:center;margin-top:28px}
+.err{color:var(--bad);font-size:14px;margin-top:6px}
+@media (max-width:860px){
+  .layout{grid-template-columns:1fr}
+  aside{display:none}
+  .mobile-pick{display:block}
+  .grid2{grid-template-columns:1fr}
+  .panel{padding:16px}
+}
+.pgrid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:640px}
+.pgrid svg{border:1px solid var(--line);border-radius:10px;background:var(--card)}
+.layout>*,.grid2>*{min-width:0}
+.cout{font-family:Consolas,Menlo,monospace;font-size:14px;display:block;width:max-content;border:1px solid var(--line);border-radius:10px;padding:10px 14px;background:var(--bg);overflow-x:auto;max-width:100%}
+.cout table{border-collapse:collapse}
+.cout th,.cout td{padding:2px 14px 2px 0;text-align:right}
+.cout th:first-child,.cout td:first-child{text-align:left}
+.cout th{border-bottom:1px solid var(--line);font-weight:700}
+.cout .foot2{margin-top:6px}
+input[type=text]{width:100%;border:1.5px solid var(--line);border-radius:9px;padding:8px;font:inherit;background:var(--bg);color:var(--ink)}
+.tmpl{display:grid;gap:8px;margin:8px 0}
+.tmpl div{border:1px solid var(--line);border-left:4px solid var(--orange);border-radius:10px;padding:8px 12px;background:var(--bg)}
+.tmpl b{color:var(--navy)}
+svg .reg{stroke:var(--orange);stroke-width:2.5}
+svg .zero{stroke:var(--muted);stroke-width:1.5;stroke-dasharray:6 4}
+svg .hl{fill:var(--orange);stroke:var(--card);stroke-width:1.5}
+svg .ttl{fill:var(--navy);font-size:15px;font-weight:700}
+input[type=range]{width:100%;accent-color:var(--orange)}
+.guess{display:flex;align-items:center;gap:12px;font-weight:700;font-size:18px;color:var(--navy)}
+@media (max-width:560px){.pgrid{grid-template-columns:1fr 1fr;gap:6px}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="brand"><span class="dot"></span>Ballantyne Ridge Wolves · AP Statistics</div>
+    <h1>Study Hub: Unit 5</h1>
+    <p class="sub">Regression Analysis</p>
+    <div class="chips">
+      <span class="chip">CED 5.1–5.5</span><span class="chip">Concept review</span><span class="chip">Practice with feedback</span><span class="chip">Regression calculator</span>
+    </div>
+    <div class="overall"><span id="ovText">0 of 0 practice questions correct</span><div class="bar"><i id="ovBar"></i></div></div>
+  </div>
+</header>
+
+<nav class="tabs" aria-label="Hub sections">
+  <div class="wrap" role="tablist">
+    <button role="tab" aria-selected="true" data-view="topics">Study by Topic</button>
+    <button role="tab" aria-selected="false" data-view="mixed">Mixed Practice</button>
+    <button role="tab" aria-selected="false" data-view="calc">Regression Calculator</button>
+    <button role="tab" aria-selected="false" data-view="guess">Guess the Correlation</button>
+    <button role="tab" aria-selected="false" data-view="ref">Quick Reference</button>
+  </div>
+</nav>
+
+<main>
+<div class="wrap">
+
+  <section class="view on" id="v-topics">
+    <div class="mobile-pick"><label for="pick" style="font-weight:600;font-size:14px">Topic</label><select id="pick"></select></div>
+    <div class="layout">
+      <aside id="topicList" aria-label="Topics"></aside>
+      <div class="panel" id="topicPanel"></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-mixed">
+    <div class="panel">
+      <h2>Mixed Practice</h2>
+      <p class="ced">10 random questions pulled from every topic in Unit 5. Great for a final check before the assessment.</p>
+      <div class="scorebox"><span class="big" id="mxScore">0 / 10</span><span id="mxMsg">Answer each question — you get instant feedback.</span><span style="flex:1"></span><button class="btn solid" id="mxNew">New set of 10</button></div>
+      <div id="mxList"></div>
+    </div>
+  </section>
+
+  <section class="view" id="v-calc">
+    <div class="grid2">
+      <div class="panel">
+        <h2>Regression Calculator</h2>
+        <p class="ced">Enter the explanatory values (x, like L1) and response values (y, like L2) in the same order. Use it to <em>check</em> your calculator work.</p>
+        <div class="grid2" style="gap:10px">
+          <div class="field"><label for="rxn">Explanatory variable name</label><input type="text" id="rxn" value="length (m)"></div>
+          <div class="field"><label for="ryn">Response variable name</label><input type="text" id="ryn" value="weight (kg)"></div>
+          <div class="field"><label for="rx">x values (L1)</label><textarea id="rx" aria-label="x values"></textarea></div>
+          <div class="field"><label for="ry">y values (L2)</label><textarea id="ry" aria-label="y values"></textarea></div>
+        </div>
+        <div class="row"><button class="btn solid" id="rGo">Calculate LSRL</button><button class="btn" id="rClear">Clear</button><button class="btn" id="rWolf">Load wolf data</button></div>
+        <div class="err" id="rErr"></div>
+        <div class="out" id="rOut"></div>
+        <div id="rEq"></div>
+        <h2 style="font-size:20px;margin-top:18px">Predict &amp; find a residual</h2>
+        <div class="grid2" style="gap:10px">
+          <div class="field"><label for="px">x value</label><input type="number" id="px" step="any" value="1.4"></div>
+          <div class="field"><label for="py">Actual y (optional)</label><input type="number" id="py" step="any" placeholder="for a residual"></div>
+        </div>
+        <div class="row"><button class="btn solid" id="pGo">Predict</button></div>
+        <p id="pOut" class="callout tip" style="display:none"></p>
+      </div>
+      <div class="panel">
+        <h2>Scatterplot with LSRL</h2>
+        <p class="ced">The orange line is the least-squares regression line. The ◆ marks the point (<span class="xb">x</span>, <span class="xb">y</span>) — the LSRL always passes through it.</p>
+        <figure id="rScat"></figure>
+        <h2 style="font-size:20px;margin-top:10px">Residual Plot</h2>
+        <p class="ced">Residuals vs. x. No pattern → a linear model is appropriate. A curve → it isn’t.</p>
+        <figure id="rRes"></figure>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-guess">
+    <div class="grid2">
+      <div class="panel">
+        <h2>Guess the Correlation</h2>
+        <p class="ced">Look at the scatterplot, slide to your guess for r, then check. Build your eye for strength and direction (CED 5.2).</p>
+        <figure id="gFig"></figure>
+      </div>
+      <div class="panel">
+        <div class="guess"><span>Your guess: r =</span><span id="gVal">0.00</span></div>
+        <input type="range" id="gSl" min="-1" max="1" step="0.01" value="0" aria-label="Your guess for r">
+        <div class="row"><button class="btn solid" id="gGo">Check</button><button class="btn" id="gNew">New scatterplot</button></div>
+        <p id="gOut" class="callout tip" style="display:none"></p>
+        <div class="scorebox" style="margin-top:14px"><span class="big" id="gScore">0 / 0</span><span>within 0.10 of the actual r</span></div>
+        <div class="callout warn"><strong>Remember</strong>r only measures <b>linear</b> association. Strength is how tightly the points follow a line — not how steep the line is.</div>
+      </div>
+    </div>
+  </section>
+
+  <section class="view" id="v-ref">
+    <div class="ref" id="refGrid"></div>
+  </section>
+
+  <p class="foot">Aligned to the AP Statistics Course and Exam Description (effective Fall 2026), Unit 5 Topics 5.1–5.5. Data sets are made up for practice. Your progress is saved in this browser only.</p>
+</div>
+</main>
+
+<script>
+/* ===================== GRAPH HELPERS ===================== */
+const fmt = v => (Math.round(v*1000)/1000).toString().replace('-','−');
+const r2d = (v,d) => { let s=(Math.round(v*10**d)/10**d).toFixed(d); if(/^-0\.?0*$/.test(s)) s=s.slice(1); return s.replace('-','−'); };
+function ticks(min,max,step){ const a=[]; for(let t=min; t<=max+1e-9; t+=step) a.push(Math.round(t*1e6)/1e6); return a; }
+function scatter(o){
+  const W=o.W||620, padL=o.mini?14:62, padR=16, padT=o.title?26:14, ph=o.ph||250, padB=o.mini?14:54, H=padT+ph+padB;
+  const x=v=>padL+(v-o.xmin)/(o.xmax-o.xmin)*(W-padL-padR), y=v=>padT+ph-(v-o.ymin)/(o.ymax-o.ymin)*ph;
+  let s=`<svg viewBox="0 0 ${W} ${H}" class="fig" role="img" aria-label="${o.aria||'Scatterplot'}">`;
+  if(o.title) s+=`<text x="${padL}" y="18" class="ttl">${o.title}</text>`;
+  if(!o.mini){
+    ticks(o.ymin,o.ymax,o.ytick).forEach(t=>{ s+=`<line x1="${padL}" x2="${W-padR}" y1="${y(t)}" y2="${y(t)}" class="faint"/><text x="${padL-8}" y="${y(t)+4}" class="tk" text-anchor="end">${t}</text>`; });
+    ticks(o.xmin,o.xmax,o.xtick).forEach(t=>{ s+=`<line x1="${x(t)}" x2="${x(t)}" y1="${padT+ph}" y2="${padT+ph+5}" class="ax"/><text x="${x(t)}" y="${padT+ph+19}" class="tk" text-anchor="middle">${t}</text>`; });
+    s+=`<text x="${(padL+W-padR)/2}" y="${padT+ph+42}" class="lab" text-anchor="middle">${o.xlabel}</text>`;
+    s+=`<text transform="translate(14 ${padT+ph/2}) rotate(-90)" class="lab" text-anchor="middle">${o.ylabel}</text>`;
+  }
+  s+=`<line x1="${padL}" x2="${W-padR}" y1="${padT+ph}" y2="${padT+ph}" class="ax"/><line x1="${padL}" x2="${padL}" y1="${padT}" y2="${padT+ph}" class="ax"/>`;
+  if(o.zero) s+=`<line x1="${padL}" x2="${W-padR}" y1="${y(0)}" y2="${y(0)}" class="zero"/>`;
+  if(o.line){ const xs=o.pts.map(p=>p[0]); const x0=o.line.x0??Math.min(...xs), x1=o.line.x1??Math.max(...xs); s+=`<line x1="${x(x0)}" x2="${x(x1)}" y1="${y(o.line.a+o.line.b*x0)}" y2="${y(o.line.a+o.line.b*x1)}" class="reg"/>`; }
+  o.pts.forEach(p=>{ s+=`<circle cx="${x(p[0])}" cy="${y(p[1])}" r="${o.mini?3.6:4.8}" class="dot d0"/>`; });
+  (o.hl||[]).forEach(h=>{ s+=`<circle cx="${x(h[0])}" cy="${y(h[1])}" r="7" class="hl"/>`; if(h[2]) s+=`<text x="${x(h[0])+11}" y="${y(h[1])+4}" class="lab" style="font-size:12.5px">${h[2]}</text>`; });
+  if(o.center){ const cx=x(o.center[0]), cy=y(o.center[1]); s+=`<path d="M${cx} ${cy-8} L${cx+8} ${cy} L${cx} ${cy+8} L${cx-8} ${cy} Z" style="fill:var(--navy);stroke:var(--card);stroke-width:1.5"/>`; }
+  return s+`</svg>`;
+}
+function linreg(xs,ys){
+  const n=xs.length, mx=xs.reduce((a,b)=>a+b,0)/n, my=ys.reduce((a,b)=>a+b,0)/n;
+  let sxx=0,syy=0,sxy=0; for(let i=0;i<n;i++){ sxx+=(xs[i]-mx)**2; syy+=(ys[i]-my)**2; sxy+=(xs[i]-mx)*(ys[i]-my); }
+  const b=sxy/sxx, a=my-b*mx, r=sxy/Math.sqrt(sxx*syy);
+  return {n,mx,my,a,b,r,res:xs.map((x,i)=>ys[i]-(a+b*x))};
+}
+function niceStep(range,k){ if(range<=0) return 1; const rough=range/(k||6), p=Math.pow(10,Math.floor(Math.log10(rough))), m=rough/p; return (m<1.5?1:m<3?2:m<7?5:10)*p; }
+function niceAxis(vals,k){ let lo=Math.min(...vals), hi=Math.max(...vals); if(hi===lo){lo-=1;hi+=1;} const st=niceStep(hi-lo,k); return {min:Math.floor(lo/st)*st, max:Math.ceil(hi/st)*st, step:st}; }
+function compOut(o){
+  return `<div class="cout"><table><thead><tr><th>Predictor</th><th>Coef</th><th>SE Coef</th><th>T</th><th>P</th></tr></thead><tbody>${o.rows.map(r=>`<tr>${r.map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody></table><div class="foot2">${o.foot}</div></div>`;
+}
+
+/* ===================== SHARED DATA / FIGURES ===================== */
+const D={
+  wolf:[[1.39,48.1],[1.54,59.7],[1.48,49.5],[1.17,33.1],[1.22,31.6],[1.53,52.7],[1.05,21.2],[1.5,54.2],[1.49,50.3],[1.31,44.1],[1.22,38.1],[1.2,35.8],[1.19,27.7],[1.29,40.3]],
+  chirp:[[88,62],[96,64],[104,64],[112,67],[118,68],[124,70],[130,74],[138,73],[144,76],[152,79],[160,79],[168,82],[176,84],[184,86]],
+  study:[[7,91],[5,75],[6,83],[0.5,59],[4.5,83],[4,82],[7,84],[3,68],[5,84],[0.5,50],[3,69],[2.5,69],[1,69],[6.5,91],[3,70],[8,93],[4.5,77],[5,89],[5,79],[5.5,82]],
+  coffee:[[0,190],[4,170],[8,154],[12,139],[16,129],[20,119],[24,113],[28,106],[32,100],[36,96],[40,91],[44,89],[48,85],[52,84],[56,80]],
+  geyser:[[1.7,52],[1.8,52],[2.4,56],[2.2,56],[2,47],[2.1,51],[2.3,58],[1.9,46],[2.1,58],[4.4,73],[4,78],[4.2,74],[4.5,83],[4.7,83],[3.8,68],[4.7,87],[3.6,76],[4.5,80],[4.6,80],[3.8,72],[4.1,73],[4.6,85]],
+  p1:[[5.7,6],[4.3,3.2],[0.9,3.3],[3.5,3.6],[6.2,6.1],[0.2,3.1],[8.7,5.7],[8.5,7],[0.4,2.5],[8,7.6],[1.8,4],[7,6.7],[1.6,3.2],[6.9,6.3],[9.6,8.1],[9.8,8.2],[6.6,6.8],[1.6,3],[3.9,4.8],[2.8,4.8],[9.6,8.8],[3,3.4],[5.6,5.3],[4.1,5],[1.4,2.2],[3.8,2.8],[7.7,5.9],[4.1,4.9],[6.8,6],[5.8,5.2]],
+  p2:[[0,7.2],[1.3,5.4],[1.4,7.1],[3.8,7.6],[6.2,5.8],[8.4,4.7],[1.3,7.2],[5.6,4],[2.7,7.4],[8.2,5.5],[6.4,3.2],[2.1,4.6],[0.4,6.3],[4.9,2.1],[3.2,8.4],[9.7,3],[7.8,2.2],[7.6,3],[10,2.1],[7.7,4.3],[7.5,3.5],[5,3.8],[3.9,7.8],[0.9,3.8],[0.4,8.5],[7.9,7.2],[6.8,7.5],[4.4,2.2],[2.1,3.7],[8,3.8]],
+  p3:[[2.7,5.7],[2.6,8],[2,2.5],[9.4,7.5],[8.4,3.1],[5.5,6.4],[5.5,3.7],[9.5,6.8],[9.1,4.8],[4.2,3.3],[2,3.9],[4.7,7.6],[4,9.5],[5.6,0.3],[6.6,4.5],[9.1,2.7],[5.8,4.6],[8.9,7.1],[2.2,4.1],[8.2,2.3],[0.7,4.5],[3.6,3],[3.8,5.8],[3,2.4],[2.3,6.7],[2.8,5],[8.9,4.6],[8.5,5],[4.6,8.3],[2.4,5.4]],
+  p4:[[2.3,6.1],[7.7,3.4],[0.7,8.2],[5.8,4.3],[7.7,3.5],[5.9,4.9],[7.7,3.3],[3,6.6],[1.2,8.4],[8.3,2.8],[5.5,4.2],[4.6,5.5],[4.9,5],[8.8,2.2],[4.5,4.6],[4.9,4.8],[9.9,1.4],[1.3,7.8],[0.7,8.5],[9.1,3.7],[3.9,6],[2.7,6.8],[8.7,2.6],[1.5,8.1],[4.6,5.9],[5.6,4.9],[9,2.7],[4.7,5.7],[7.8,3.2],[6.9,4.2]],
+  u:[[0,19.4],[0.4,11.5],[0.8,12.9],[1.2,9.8],[1.7,8.1],[2.1,6.8],[2.5,3.3],[2.9,4.3],[3.3,2.6],[3.8,6.9],[4.2,2.7],[4.6,1.7],[5,1.7],[5.4,1.3],[5.8,1.2],[6.2,2.5],[6.7,4.2],[7.1,4.3],[7.5,6.9],[7.9,6.9],[8.3,8.7],[8.8,12.3],[9.2,13.1],[9.6,14],[10,16.8]].map(p=>[Math.round((20+5*p[0])*10)/10, Math.round((40-p[1])*10)/10])
+};
+const FIT={}; for(const k in D){ FIT[k]=linreg(D[k].map(p=>p[0]),D[k].map(p=>p[1])); }
+const resPts=k=>D[k].map((p,i)=>[p[0],FIT[k].res[i]]);
+const mini=(k,t)=>scatter({pts:D[k],xmin:0,xmax:10,ymin:0,ymax:10,W:300,ph:190,mini:true,title:t,aria:'Scatterplot '+t});
+const FIG={
+  studyScat: ()=>scatter({pts:D.study,xmin:0,xmax:8,xtick:1,ymin:40,ymax:100,ytick:10,xlabel:'Hours spent studying',ylabel:'Test score',aria:'Scatterplot of test score vs hours studying'}),
+  geyserScat: ()=>scatter({pts:D.geyser,xmin:1.5,xmax:5,xtick:0.5,ymin:40,ymax:90,ytick:10,xlabel:'Eruption duration (minutes)',ylabel:'Wait until next eruption (min)',aria:'Scatterplot of wait time vs eruption duration'}),
+  coffeeScat: ()=>scatter({pts:D.coffee,xmin:0,xmax:60,xtick:10,ymin:60,ymax:200,ytick:20,xlabel:'Minutes after pouring',ylabel:'Coffee temperature (°F)',aria:'Scatterplot of coffee temperature vs time'}),
+  coffeeLine: ()=>scatter({pts:D.coffee,line:FIT.coffee,xmin:0,xmax:60,xtick:10,ymin:60,ymax:200,ytick:20,xlabel:'Minutes after pouring',ylabel:'Coffee temperature (°F)',aria:'Scatterplot of coffee temperature with regression line'}),
+  coffeeRes: ()=>scatter({pts:resPts('coffee'),zero:true,xmin:0,xmax:60,xtick:10,ymin:-15,ymax:25,ytick:5,xlabel:'Minutes after pouring',ylabel:'Residual (°F)',aria:'Residual plot for coffee data, curved'}),
+  chirpLine: ()=>scatter({pts:D.chirp,line:FIT.chirp,xmin:80,xmax:190,xtick:10,ymin:55,ymax:90,ytick:5,xlabel:'Cricket chirps per minute',ylabel:'Temperature (°F)',aria:'Scatterplot of temperature vs chirps with regression line'}),
+  chirpRes: ()=>scatter({pts:resPts('chirp'),zero:true,xmin:80,xmax:190,xtick:10,ymin:-3,ymax:3,ytick:1,xlabel:'Cricket chirps per minute',ylabel:'Residual (°F)',aria:'Residual plot for cricket data, random scatter'}),
+  wolfLine: ()=>scatter({pts:D.wolf,line:FIT.wolf,xmin:1,xmax:1.6,xtick:0.1,ymin:15,ymax:65,ytick:10,xlabel:'Length (meters)',ylabel:'Weight (kg)',aria:'Scatterplot of wolf weight vs length with regression line'}),
+  wolfOut: ()=>compOut({rows:[['Constant','−47.851','7.015','−6.82','0.000'],['Length','67.617','5.251','12.88','0.000']],foot:'S = 3.022 &nbsp;&nbsp; R-Sq = 93.3%'}),
+  speedScat: ()=>scatter({pts:D.u,xmin:20,xmax:70,xtick:10,ymin:20,ymax:40,ytick:5,xlabel:'Driving speed (mph)',ylabel:'Fuel efficiency (mpg)',aria:'Scatterplot of fuel efficiency vs speed, curved'}),
+  rPanels: ()=>`<div class="pgrid">${mini('p1','I')}${mini('p2','II')}${mini('p3','III')}${mini('p4','IV')}</div>`
+};
+
+/* ===================== CONTENT ===================== */
+const SECTIONS=[
+{ id:'s1', title:'Scatterplots', ced:'CED Topic 5.1 · Skills 3.A, 4.A, 4.B',
+review:`
+<h3>Bivariate quantitative data</h3>
+<ul>
+<li>A <b>bivariate quantitative data set</b> is made of <b>ordered pairs</b> — two quantitative variables measured on the <b>same individuals</b>.</li>
+<li>A <b>scatterplot</b> shows one dot per individual: the <b>explanatory variable</b> on the <b>x-axis</b> and the <b>response variable</b> on the <b>y-axis</b>.</li>
+<li>The explanatory variable is the one used to <b>explain or predict</b> the response. Ask: “Which variable am I using to predict the other?”</li>
+</ul>
+<div class="vocab">
+<div><b>Explanatory variable (x)</b>The predictor. Goes on the horizontal axis.</div>
+<div><b>Response variable (y)</b>The outcome we want to predict. Goes on the vertical axis.</div>
+</div>
+<h3>Describing a scatterplot: Direction, Unusual features, Form, Strength — in context</h3>
+<div class="vocab">
+<div><b>Direction</b><b style="display:inline">Positive:</b> as x increases, y <em>tends to</em> increase. <b style="display:inline">Negative:</b> as x increases, y <em>tends to</em> decrease.</div>
+<div><b>Unusual features</b>Points that don’t fit the general pattern, or <b style="display:inline">clusters</b> (separate groups of points).</div>
+<div><b>Form</b><b style="display:inline">Linear</b> (points follow a straight-line pattern) or <b style="display:inline">non-linear</b> (curved).</div>
+<div><b>Strength</b>How closely the points follow the pattern: <b style="display:inline">strong, moderate, or weak</b>.</div>
+</div>
+{{studyScat}}
+<div class="callout tip"><strong>Model description</strong>“There is a <b>strong, positive, linear</b> association between hours spent studying and test score for these 20 students. Students who studied more hours <b>tended to</b> earn higher scores. There are no obvious unusual points or clusters.”</div>
+<h3>Justifying a claim with a scatterplot</h3>
+<ul>
+<li>Point to specific features of the graph (direction, a cluster, specific points) and connect them to the claim <b>in context</b>.</li>
+</ul>
+<div class="callout warn"><strong>Watch out</strong>Don’t write “it’s linear because it makes a line.” Describe the <b>pattern</b> of the points. Use “<b>tend to</b>” — not every student who studied more scored higher. And strength is about <b>how tightly</b> points follow the pattern, not how <b>steep</b> it is.</div>
+`,
+mc:[
+{q:`A researcher wants to use a used car’s mileage to predict its selling price. Which describes how the scatterplot should be set up?`,o:[`Price on the x-axis, mileage on the y-axis`,`Mileage on the x-axis, price on the y-axis`,`Either way — it does not matter which variable goes on which axis`,`Mileage and price should be shown in side-by-side boxplots`],a:1,e:`Mileage is used to predict price, so mileage is the explanatory variable (x-axis) and price is the response variable (y-axis).`},
+{q:`Which data set could be displayed in a scatterplot?`,o:[`The heights of 25 freshmen and the heights of 25 different seniors`,`The eye color and height of 25 students`,`The height and arm span of each of 25 students`,`The favorite sport and grade level of 25 students`],a:2,e:`A scatterplot needs two <b>quantitative</b> variables measured on the <b>same individuals</b> (ordered pairs). Two different groups of students don’t give pairs, and eye color, sport, and grade level here are categorical.`},
+{q:`The scatterplot shows hours spent studying and test score for 20 students. Which best describes the association?`,fig:'studyScat',o:[`Weak, negative, linear`,`Strong, positive, non-linear`,`Strong, positive, linear`,`Moderate, negative, non-linear`],a:2,e:`The points rise from left to right (positive), follow a straight-line pattern (linear), and cluster fairly tightly around that pattern (strong).`},
+{q:`Using the same scatterplot, which statement is the best interpretation of the positive association?`,fig:'studyScat',o:[`Every student who studied more scored higher than every student who studied less.`,`Studying more causes students to earn higher scores.`,`Each extra hour of studying adds exactly 5 points to a score.`,`Students who studied more hours tended to earn higher test scores.`],a:3,e:`A positive association means that as x increases, y <em>tends to</em> increase. It is not true for every pair of students, it doesn’t prove cause and effect, and the graph alone doesn’t give an exact rate.`},
+{q:`The scatterplot shows the duration of 22 geyser eruptions and the wait time until the next eruption. Which unusual feature is shown?`,fig:'geyserScat',o:[`Two clusters: short eruptions (about 2 min) and long eruptions (about 4 min)`,`One extreme outlier far from all other points`,`A curved, non-linear form`,`There are no unusual features`],a:0,e:`The points form two separate groups — one around 1.7–2.4 minutes and another around 3.6–4.7 minutes — with a gap between them. Clusters are an unusual feature.`},
+{q:`A park ranger claims that when an eruption lasts less than 3 minutes, the wait until the next eruption is less than 60 minutes. Does the scatterplot support the claim?`,fig:'geyserScat',o:[`No, because the association is positive.`,`Yes, because every eruption shorter than 3 minutes was followed by a wait of less than 60 minutes.`,`No, because some eruptions longer than 3 minutes had waits over 80 minutes.`,`Yes, because the correlation is close to 1.`],a:1,e:`To justify a claim, point to the evidence in the graph. All 9 short eruptions (left cluster) have waits between about 46 and 58 minutes — all below 60.`},
+{q:`The scatterplot shows the temperature of a cup of coffee at different times after it was poured. Which best describes the form?`,fig:'coffeeScat',o:[`Linear, because the temperature always decreases`,`Non-linear (curved): the temperature drops quickly at first, then more slowly`,`Linear, because the points are close together`,`There is no form because the association is negative`],a:1,e:`A negative association can still be curved. The coffee cools by about 20°F in the first 4 minutes but only about 4°F between 48 and 52 minutes — the pattern bends, so the form is non-linear.`},
+{q:`What does the <b>strength</b> of an association in a scatterplot describe?`,o:[`How steep the pattern of points is`,`Whether y increases or decreases as x increases`,`How closely the points follow the general pattern`,`How many points are in the scatterplot`],a:2,e:`Strength is how closely the points follow the pattern (strong, moderate, weak). Steepness is about the slope; increasing/decreasing is direction.`}
+],
+frq:[
+{q:`The scatterplot shows the number of hours spent studying and the test score for 20 students in an AP Statistics class. Describe the relationship between hours spent studying and test score.`,fig:'studyScat',
+model:`<p>There is a <b>strong, positive, linear</b> association between the number of hours spent studying and test score for these 20 students. Students who studied more hours <b>tended to</b> earn higher test scores. There are no clear outliers or clusters.</p>`,
+check:[`Mentioned direction (positive) and explained it in context`,`Mentioned form (linear)`,`Mentioned strength (strong)`,`Addressed unusual features (none apparent)`,`Named both variables — hours studying and test score — not just “x” and “y”`]}
+]},
+
+{ id:'s2', title:'Correlation', ced:'CED Topic 5.2 · Skill 4.D',
+review:`
+<h3>The correlation coefficient, r</h3>
+<ul>
+<li><b>r</b> summarizes the <b>strength and direction</b> of the <b>linear</b> association between two quantitative variables.</li>
+<li>−1 ≤ r ≤ 1. The <b>sign</b> gives direction: r &gt; 0 positive, r &lt; 0 negative.</li>
+<li>The closer r is to <b>−1 or 1</b>, the stronger the linear association. <b>r = 0</b>: no <em>linear</em> association. <b>r = ±1</b>: perfect linear association (all points on a line).</li>
+<li>r is <b>unit-free</b>. Changing units (inches → centimeters, °F → °C) does not change r.</li>
+<li>r is calculated using technology.</li>
+</ul>
+{{rPanels}}
+<p style="font-size:14px;color:var(--muted)">I: r ≈ 0.92 &nbsp;·&nbsp; II: r ≈ −0.50 &nbsp;·&nbsp; III: r ≈ 0.00 &nbsp;·&nbsp; IV: r ≈ −0.97</p>
+<div class="callout tip"><strong>Interpretation frame</strong>“The correlation of r = 0.91 indicates a <b>strong, positive, linear</b> association between hours spent studying and test score.”</div>
+<h3>Two big cautions</h3>
+<ul>
+<li><b>A correlation close to −1 or 1 does not necessarily mean a linear model is appropriate.</b> Always look at the graph — curved data can still have r near ±1.</li>
+<li><b>Correlation does not imply causation.</b> A real relationship between two variables doesn’t mean changes in one <em>cause</em> changes in the other. A third variable may be related to both.</li>
+</ul>
+{{coffeeScat}}
+<p style="font-size:14px;color:var(--muted)">The coffee data have r = −0.95, but the pattern is clearly curved.</p>
+<div class="callout warn"><strong>Watch out</strong>r = 0 does <b>not</b> mean “no relationship” — only no <b>linear</b> relationship. Save the word <b>correlation</b> for two <b>quantitative</b> variables.</div>
+`,
+mc:[
+{q:`The four scatterplots each have a different correlation: 0.92, −0.50, 0.00, and −0.97. Which plot has r ≈ −0.50?`,fig:'rPanels',o:[`I`,`II`,`III`,`IV`],a:1,e:`Plot II slopes down (negative) but the points are widely scattered (moderate). Plot IV is also negative but much tighter (−0.97). Plot I is strong positive and plot III shows no linear pattern.`},
+{q:`For the four scatterplots, which lists the plots in order from the <b>smallest</b> correlation to the <b>largest</b> correlation?`,fig:'rPanels',o:[`III, II, IV, I`,`I, III, II, IV`,`IV, II, III, I`,`II, IV, III, I`],a:2,e:`IV (−0.97) &lt; II (−0.50) &lt; III (0.00) &lt; I (0.92). Smallest means most negative — not weakest.`},
+{q:`Which of the following could <b>not</b> be the value of a correlation coefficient?`,o:[`−0.99`,`0`,`0.05`,`1.2`],a:3,e:`r is always between −1 and 1, inclusive. A value of 1.2 is impossible.`},
+{q:`For a sample of students, the correlation between daily screen time (hours) and hours of sleep is r = −0.62. Which is the best interpretation?`,o:[`There is a moderate, negative, linear association between screen time and sleep: students with more screen time tend to get less sleep.`,`62% of students who have more screen time get less sleep.`,`Each additional hour of screen time decreases sleep by 0.62 hours.`,`More screen time causes students to sleep less.`],a:0,e:`r describes direction and strength of the linear association. It is not a percentage, not a slope, and it doesn’t prove cause and effect.`},
+{q:`The scatterplot shows driving speed and fuel efficiency for a car. The correlation is r = −0.04. Which statement is correct?`,fig:'speedScat',o:[`There is no relationship between speed and fuel efficiency.`,`There is a strong, negative, linear association.`,`There is almost no linear association, but there is a strong non-linear relationship.`,`The correlation must have been calculated incorrectly.`],a:2,e:`r only measures <b>linear</b> association. Efficiency rises and then falls as speed increases — a clear curved pattern — so r is near 0 even though the variables are strongly related.`},
+{q:`The coffee temperature data have r = −0.95. A student says, “Since r is so close to −1, a linear model is definitely appropriate.” Which response is best?`,fig:'coffeeScat',o:[`The student is correct; |r| &gt; 0.9 means the form is linear.`,`The student is incorrect; r close to −1 doesn’t guarantee a linear form, and this scatterplot is curved.`,`The student is incorrect; a linear model is only appropriate when r is positive.`,`The student is correct, because the association is negative.`],a:1,e:`A correlation close to −1 or 1 does not necessarily mean a linear model is appropriate. Always check the graph (and the residual plot).`},
+{q:`The correlation between height (in inches) and weight (in pounds) for a group of adults is r = 0.68. If height is converted to centimeters and weight to kilograms, the new correlation will be`,o:[`0.68`,`smaller than 0.68`,`larger than 0.68`,`impossible to determine without the data`],a:0,e:`r is unit-free. Changing the units of measurement doesn’t change the correlation.`},
+{q:`Across U.S. cities, the correlation between the number of fast-food restaurants and the number of hospitals is r = 0.85. Which conclusion is justified?`,o:[`Fast-food restaurants cause people to need hospitals.`,`Building more hospitals would cause more fast-food restaurants to open.`,`There is a strong, positive, linear association, but we can’t conclude cause and effect; population size is likely related to both.`,`Since r is less than 1, there is no relationship.`],a:2,e:`Correlation does not imply causation. Larger cities tend to have more of both, so city population is a variable associated with both counts.`}
+],
+frq:[
+{q:`For each month over several years, researchers recorded ice cream sales (thousands of dollars) and the number of shark attacks at a beach town. The correlation is r = 0.88.<br>(a) Interpret the correlation in context.<br>(b) A reporter writes, “Ice cream sales cause shark attacks.” Is this conclusion justified? Explain, and identify a variable that might explain the relationship.`,
+model:`<p><b>(a)</b> There is a <b>strong, positive, linear</b> association between monthly ice cream sales and the number of shark attacks: months with higher ice cream sales tend to have more shark attacks.</p>
+<p><b>(b)</b> No. Correlation does not imply causation — these data are observational. A variable such as <b>temperature (season)</b> could explain the relationship: in hot summer months, more people buy ice cream <em>and</em> more people swim in the ocean, which leads to more shark attacks.</p>`,
+check:[`(a) Gave strength, direction, and “linear”`,`(a) Stayed in context (ice cream sales and shark attacks)`,`(b) Said “no” and that correlation does not imply causation`,`(b) Named another variable and linked it to BOTH ice cream sales and shark attacks`]}
+]},
+
+{ id:'s3', title:'Linear Regression Models', ced:'CED Topic 5.3 · Skill 3.B',
+review:`
+<h3>The model</h3>
+<ul>
+<li>If the form of the relationship looks <b>linear</b>, we can model it with a <b>linear regression model</b> that uses x to predict y.</li>
+<li><span class="formula">ŷ = a + bx</span> &nbsp; where <b>ŷ</b> (“y-hat”) is the <b>predicted</b> response, <b>a</b> is the y-intercept, <b>b</b> is the slope, and x is the explanatory variable.</li>
+<li>To predict, substitute the x-value into the equation.</li>
+<li>Write the equation in context with variable names: <span class="formula">predicted temperature = 38.4 + 0.259(chirps)</span></li>
+</ul>
+{{chirpLine}}
+<h3>Interpolation vs. extrapolation</h3>
+<div class="vocab">
+<div><b>Interpolation</b>Predicting with an x-value <b>within</b> the interval of x-values used to build the model. Generally reasonable.</div>
+<div><b>Extrapolation</b>Predicting with an x-value <b>beyond</b> that interval. Less reliable — and the farther out, the less reliable. The pattern may not continue.</div>
+</div>
+<div class="callout warn"><strong>Watch out</strong>Use the hat! <b>y = 38.4 + 0.259x</b> is wrong — the model gives <b>predicted</b> values. Write <b>ŷ</b> or the word “predicted,” and define your variables.</div>
+`,
+mc:[
+{q:`For 14 nights, a student recorded cricket chirps per minute and the temperature. The model is <span class="formula">predicted temperature = 38.4 + 0.259(chirps)</span>. What is the predicted temperature when crickets chirp 140 times per minute?`,o:[`36.3°F`,`74.7°F`,`140.0°F`,`5,412°F`],a:1,e:`ŷ = 38.4 + 0.259(140) = 38.4 + 36.26 = 74.66 ≈ 74.7°F.`},
+{q:`Which equation is written correctly for a model that predicts temperature (°F) from chirps per minute?`,o:[`temperature = 38.4 + 0.259(chirps)`,`y = 38.4 + 0.259x`,`predicted temperature = 38.4 + 0.259(chirps)`,`predicted chirps = 38.4 + 0.259(temperature)`],a:2,e:`The model gives a <b>predicted</b> response, so it needs ŷ or the word “predicted,” and variables should be defined in context. Option D swaps the explanatory and response variables.`},
+{q:`The chirp data used chirp rates from 88 to 184 chirps per minute. Using the model to predict the temperature at 250 chirps per minute is an example of`,fig:'chirpLine',o:[`interpolation, and the prediction is reliable`,`extrapolation, and the prediction is less reliable`,`interpolation, and the prediction is less reliable`,`a residual`],a:1,e:`250 is beyond the interval of x-values (88–184) used to build the model, so this is extrapolation. We don’t know whether the linear pattern continues out there.`},
+{q:`For the same model (chirps 88 to 184), which prediction would be an example of <b>interpolation</b>?`,o:[`Predicting temperature at 30 chirps per minute`,`Predicting temperature at 120 chirps per minute`,`Predicting temperature at 220 chirps per minute`,`Predicting temperature at 0 chirps per minute`],a:1,e:`120 is within the interval of x-values (88–184) used to build the model.`},
+{q:`For a sample of wolves, the model <span class="formula">predicted weight = −47.9 + 67.6(length)</span> uses length in meters to predict weight in kilograms. What is the predicted weight of a wolf that is 1.4 meters long?`,o:[`46.7 kg`,`94.6 kg`,`19.7 kg`,`142.5 kg`],a:0,e:`ŷ = −47.9 + 67.6(1.4) = −47.9 + 94.64 = 46.74 ≈ 46.7 kg. (Don’t forget the negative intercept.)`},
+{q:`The wolves used to build the model ranged from 1.05 to 1.54 m long. For which length would the predicted weight be <b>least</b> reliable?`,o:[`1.10 m`,`1.30 m`,`1.50 m`,`2.20 m`],a:3,e:`2.20 m is far beyond the interval of lengths used to build the model. Predictions get less reliable the farther we extrapolate.`},
+{q:`In the equation ŷ = a + bx, what does ŷ represent?`,o:[`The actual (observed) value of the response variable`,`The mean of the response variable`,`The predicted value of the response variable`,`The slope of the line`],a:2,e:`The “hat” means predicted. ŷ is the value of the response variable predicted by the model for a given x.`}
+],
+frq:[
+{q:`A student counted cricket chirps per minute on 14 nights (88 to 184 chirps per minute) and recorded the temperature. The linear model is <span class="formula">predicted temperature = 38.4 + 0.259(chirps)</span>.<br>(a) Predict the temperature on a night when crickets chirp 130 times per minute. Show your work.<br>(b) Would you trust the model to predict the temperature on a night when crickets chirp 40 times per minute? Explain.`,fig:'chirpLine',
+model:`<p><b>(a)</b> predicted temperature = 38.4 + 0.259(130) = 38.4 + 33.67 = <b>72.07 ≈ 72.1°F</b>.</p>
+<p><b>(b)</b> No. 40 chirps per minute is far below the interval of chirp rates used to build the model (88 to 184), so this is <b>extrapolation</b>. The linear pattern may not continue for such low chirp rates, so the prediction is not reliable.</p>`,
+check:[`(a) Substituted 130 into the equation and showed the work`,`(a) Got about 72.1°F with units`,`(b) Said the prediction is not reliable and named it extrapolation`,`(b) Referred to the interval of x-values used (88–184 chirps per minute)`]}
+]},
+
+{ id:'s4', title:'Residuals & Residual Plots', ced:'CED Topic 5.4 · Skills 3.B, 4.A, 4.D',
+review:`
+<h3>Residuals</h3>
+<p><span class="formula">residual = y − ŷ = actual − predicted</span></p>
+<ul>
+<li><b>Positive residual:</b> the actual value is <b>above</b> the line → the model <b>underpredicts</b> (underestimates).</li>
+<li><b>Negative residual:</b> the actual value is <b>below</b> the line → the model <b>overpredicts</b> (overestimates).</li>
+<li>Working backward: <span class="formula">actual = predicted + residual</span></li>
+</ul>
+<div class="callout tip"><strong>Interpretation frame</strong>“The actual weight of this wolf was <b>3.5 kg more than</b> the weight predicted by the regression line for a wolf with a length of 1.54 m.”</div>
+<h3>Residual plots</h3>
+<ul>
+<li>A <b>residual plot</b> is a scatterplot of the <b>residuals</b> (y-axis) versus the <b>x-values</b> or the <b>predicted values ŷ</b> (x-axis).</li>
+<li>Use it to decide whether a linear model is <b>appropriate</b>.</li>
+<li><b>Apparent randomness</b> (no pattern) → the association is linear → a linear model is appropriate.</li>
+<li><b>Curvature</b> → a linear model is not the most appropriate model.</li>
+</ul>
+<div class="grid2" style="gap:10px">
+<div><p style="font-weight:700;margin:6px 0 0;color:var(--good)">Random scatter — linear model appropriate</p>{{chirpRes}}</div>
+<div><p style="font-weight:700;margin:6px 0 0;color:var(--bad)">Curved — linear model not appropriate</p>{{coffeeRes}}</div>
+</div>
+<div class="callout warn"><strong>Watch out</strong>It’s <b>actual − predicted</b>, not the other way around (think “AP”). And a high |r| does not replace the residual plot — the coffee data have r = −0.95 but a clearly curved residual plot.</div>
+`,
+mc:[
+{q:`The model <span class="formula">predicted weight = −47.9 + 67.6(length)</span> predicts a wolf’s weight (kg) from its length (m). One wolf is 1.54 m long and weighs 59.7 kg. What is its residual?`,o:[`−3.5 kg`,`3.5 kg`,`56.2 kg`,`104.1 kg`],a:1,e:`ŷ = −47.9 + 67.6(1.54) = 56.2 kg. Residual = actual − predicted = 59.7 − 56.2 = 3.5 kg.`},
+{q:`A point on a scatterplot lies <b>below</b> the least-squares regression line. Which is true?`,o:[`Its residual is positive, and the model underpredicted its response.`,`Its residual is negative, and the model overpredicted its response.`,`Its residual is negative, and the model underpredicted its response.`,`Its residual is zero.`],a:1,e:`Below the line means actual &lt; predicted, so actual − predicted is negative. The model predicted too high — it overpredicted.`},
+{q:`Using the wolf model, one wolf that is 1.4 m long has a residual of −4.2 kg. What is this wolf’s actual weight?`,o:[`42.5 kg`,`46.7 kg`,`50.9 kg`,`−4.2 kg`],a:0,e:`Predicted weight = −47.9 + 67.6(1.4) = 46.74 kg. Actual = predicted + residual = 46.74 + (−4.2) = 42.54 ≈ 42.5 kg.`},
+{q:`A model predicts a student’s test score from hours studied. For one student, the residual is +7 points. Which is the best interpretation?`,o:[`The student studied 7 more hours than predicted.`,`The student’s actual score was 7 points higher than the score predicted by the model for the number of hours they studied.`,`The model predicted 7 points too high for this student.`,`The student’s score was 7 points above the mean score.`],a:1,e:`A residual compares the actual y to the predicted y (not to the mean). Positive means the actual score was higher than predicted — the model underpredicted.`},
+{q:`The residual plot for the cricket chirp model is shown. What does it suggest?`,fig:'chirpRes',o:[`A linear model is appropriate because the residuals are randomly scattered with no clear pattern.`,`A linear model is not appropriate because some residuals are negative.`,`A linear model is not appropriate because the residuals are not all zero.`,`Nothing — residual plots can’t tell us about form.`],a:0,e:`Apparent randomness in a residual plot confirms a linear form, so the linear model is appropriate. Residuals are always a mix of positive and negative values.`},
+{q:`The residual plot for a linear model of the coffee temperature data (r = −0.95) is shown. What should you conclude?`,fig:'coffeeRes',o:[`A linear model is appropriate because r is close to −1.`,`A linear model is appropriate because the residuals add to zero.`,`A linear model is not the most appropriate model, because the residual plot shows a clear curved pattern.`,`A linear model is not appropriate because there are 15 points.`],a:2,e:`Curvature in a residual plot suggests that a linear model is not the most appropriate model — even though |r| is large.`},
+{q:`In a residual plot, what is plotted on the vertical axis?`,o:[`The response values, y`,`The residuals, y − ŷ`,`The explanatory values, x`,`The correlation, r`],a:1,e:`A residual plot graphs residuals (vertical axis) against the explanatory values x or the predicted values ŷ (horizontal axis).`}
+],
+frq:[
+{q:`The model <span class="formula">predicted weight = −47.9 + 67.6(length)</span> uses a wolf’s length (meters) to predict its weight (kilograms). One wolf in the pack is 1.22 m long and has a residual of −3.0 kg.<br>(a) Find the predicted weight for this wolf.<br>(b) Find the wolf’s actual weight.<br>(c) Interpret the residual in context.`,
+model:`<p><b>(a)</b> predicted weight = −47.9 + 67.6(1.22) = −47.9 + 82.47 = <b>34.6 kg</b>.</p>
+<p><b>(b)</b> actual = predicted + residual = 34.6 + (−3.0) = <b>31.6 kg</b>.</p>
+<p><b>(c)</b> This wolf’s actual weight was <b>3.0 kg less than</b> the weight predicted by the regression line for a wolf 1.22 m long. (The model overpredicted its weight.)</p>`,
+check:[`(a) Substituted 1.22 correctly (watch the negative intercept)`,`(b) Used actual = predicted + residual`,`(c) Said “less than predicted” (or overpredicted) with the amount and units`,`(c) Included the context: weight of the wolf and its length of 1.22 m`]},
+{q:`A science class recorded the temperature of a cup of coffee every 4 minutes. The correlation between time and temperature is r = −0.95. The scatterplot with the least-squares line and the residual plot are shown.{{coffeeLine}}(a) A student says the high value of |r| proves a linear model is appropriate. Do you agree? Explain using the residual plot.<br>(b) Describe what the residual plot shows about how the line’s predictions fit the data for the first few minutes.`,fig:'coffeeRes',
+model:`<p><b>(a)</b> No. A correlation close to −1 does not necessarily mean a linear model is appropriate. The residual plot shows a clear <b>curved (U-shaped) pattern</b> — positive residuals at the beginning and end and negative residuals in the middle — so a linear model is not the most appropriate model for these data.</p>
+<p><b>(b)</b> For the first few minutes the residuals are large and <b>positive</b> (about +24°F at 0 minutes), so the actual temperatures are higher than the line predicts — the line <b>underpredicts</b> the coffee’s temperature right after it is poured.</p>`,
+check:[`(a) Disagreed and said a large |r| does not guarantee a linear form`,`(a) Named the curved pattern in the residual plot as the evidence`,`(b) Said the early residuals are positive`,`(b) Concluded the line underpredicts the early temperatures, in context`]}
+]},
+
+{ id:'s5', title:'Least-Squares Regression', ced:'CED Topic 5.5 · Skills 3.B, 4.D',
+review:`
+<h3>The least-squares regression line (LSRL)</h3>
+<ul>
+<li>The LSRL is the line that <b>minimizes the sum of the squared residuals</b>.</li>
+<li>It always passes through the point <b>(<span class="xb">x</span>, <span class="xb">y</span>)</b>.</li>
+<li>The slope <b>b</b>, the y-intercept <b>a</b>, the correlation <b>r</b>, and <b>r²</b> are all calculated using <b>technology</b>.</li>
+<li>a and b are based on a <b>sample</b>, so they are <b>statistics</b>.</li>
+</ul>
+<h3>Reading computer output</h3>
+{{wolfOut}}
+<ul>
+<li>The <b>Coef</b> column holds the equation: <b>Constant</b> = y-intercept a; the row with the variable name (<b>Length</b>) = slope b.</li>
+<li>So: <span class="formula">predicted weight = −47.851 + 67.617(length)</span></li>
+<li><b>R-Sq</b> = r². Here r = +√0.933 ≈ 0.966 (positive, because the slope is positive). Ignore the other columns for now.</li>
+</ul>
+<h3>Interpreting — always in context</h3>
+<div class="tmpl">
+<div><b>Slope (b):</b> “For each additional 1 meter of length, the <b>predicted</b> weight increases by 67.6 kg.” (Equivalently: for each additional 0.1 m, predicted weight increases by about 6.76 kg.)</div>
+<div><b>y-intercept (a):</b> “The <b>predicted</b> weight of a wolf with a length of 0 meters is −47.9 kg.” Not meaningful here: x = 0 is far outside the data (extrapolation) and a weight can’t be negative.</div>
+<div><b>r² (coefficient of determination):</b> “About 93.3% of the variation in wolf weight is explained by the linear relationship with wolf length.”</div>
+</div>
+{{wolfLine}}
+<h3>On the calculator (TI-84)</h3>
+<ul>
+<li>Enter x in L1 and y in L2 (STAT → EDIT). Turn on Stat Diagnostics (MODE screen on TI-84 Plus CE) so r and r² display.</li>
+<li>STAT → CALC → <b>8: LinReg(a+bx)</b>, Xlist: L1, Ylist: L2.</li>
+<li>Translate “calculator speak”: don’t write “LinReg gave a = −47.85.” Write the equation with variable names.</li>
+</ul>
+<div class="callout warn"><strong>Watch out</strong>Interpretations of slope and intercept must say <b>predicted</b> (or “on average”). “The weight increases by 67.6 kg” is wrong — individual wolves vary. And r² is about <b>variation in y</b>, not a percent of points on the line.</div>
+`,
+mc:[
+{q:`Computer output for a regression of wolf weight (kg) on length (m) is shown. Which is the equation of the LSRL?`,fig:'wolfOut',o:[`predicted length = −47.851 + 67.617(weight)`,`predicted weight = 67.617 − 47.851(length)`,`predicted weight = −47.851 + 67.617(length)`,`predicted weight = 7.015 + 5.251(length)`],a:2,e:`In the Coef column, Constant (−47.851) is the y-intercept and the Length row (67.617) is the slope. The SE Coef column is not part of the equation.`},
+{q:`The model <span class="formula">predicted temperature = 38.4 + 0.259(chirps)</span> predicts temperature (°F) from chirps per minute. Which is the correct interpretation of the slope?`,o:[`For each additional chirp per minute, the temperature increases by 0.259°F.`,`For each additional chirp per minute, the predicted temperature increases by 0.259°F.`,`For each 1°F increase in temperature, the predicted number of chirps increases by 0.259.`,`When there are 0 chirps, the predicted temperature is 0.259°F.`],a:1,e:`The slope is the predicted change in y for a one-unit increase in x. It must say “predicted” — actual temperatures vary around the line. Option C reverses the variables.`},
+{q:`For the same model, <span class="formula">predicted temperature = 38.4 + 0.259(chirps)</span>, built from nights with 88 to 184 chirps per minute, which statement about the y-intercept is best?`,o:[`It predicts a temperature of 38.4°F when crickets chirp 0 times per minute, but this is an extrapolation and may not be reliable.`,`It means the temperature is never below 38.4°F.`,`It means each chirp adds 38.4°F.`,`It is the average temperature for all 14 nights.`],a:0,e:`The y-intercept is the predicted response when x = 0. Here x = 0 is far below the observed chirp rates, so the interpretation is an extrapolation.`},
+{q:`For the chirp model, r² = 0.985. Which is the correct interpretation?`,o:[`98.5% of the predictions are correct.`,`The temperature increases 0.985°F per chirp.`,`About 98.5% of the variation in temperature is explained by the linear relationship with chirps per minute.`,`98.5% of the points lie on the regression line.`],a:2,e:`r² is the proportion of variation in the response variable that is explained by the linear relationship with the explanatory variable.`},
+{q:`A regression of a car’s value on its age has a negative slope and r² = 0.64. What is the correlation?`,o:[`0.64`,`−0.64`,`0.80`,`−0.80`],a:3,e:`r = ±√0.64 = ±0.80. The slope is negative, so r is negative: r = −0.80.`},
+{q:`Why is the least-squares regression line called “least squares”?`,o:[`It has the smallest possible slope.`,`It makes the sum of the squared residuals as small as possible.`,`It passes through the fewest points.`,`It makes every residual equal to zero.`],a:1,e:`The LSRL is fit by minimizing the sum of the squares of the residuals.`},
+{q:`For a set of data, <span class="xb">x</span> = 20, <span class="xb">y</span> = 50, and the LSRL has slope 1.5. What is the y-intercept of the LSRL?`,o:[`20`,`30`,`48.5`,`80`],a:0,e:`The LSRL passes through (<span class="xb">x</span>, <span class="xb">y</span>) = (20, 50). So 50 = a + 1.5(20) = a + 30, and a = 20.`},
+{q:`For the wolf model, <span class="formula">predicted weight = −47.9 + 67.6(length)</span>, the y-intercept is −47.9 kg. Why doesn’t it have a reasonable interpretation in context?`,o:[`Because the slope is positive`,`Because a length of 0 m is far outside the observed lengths, and a weight can’t be negative`,`Because r² is less than 1`,`Because the intercept should always be ignored`],a:1,e:`Sometimes x = 0 is beyond the data (extrapolation), and here the predicted value is impossible (negative weight). So the intercept has no logical meaning in context.`}
+],
+frq:[
+{q:`A biologist measured the length (meters) and weight (kilograms) of 14 wolves. The scatterplot with the least-squares line and computer output are shown.<br>(a) Write the equation of the least-squares regression line. Define any variables used.<br>(b) Interpret the slope in context.<br>(c) Does the y-intercept have a reasonable interpretation in context? Explain.<br>(d) Interpret r² in context.<br>(e) One wolf is 1.17 m long and weighs 33.1 kg. Calculate and interpret its residual.`,fig:'wolfOut',
+model:`{{wolfLine}}
+<p><b>(a)</b> <b>predicted weight = −47.851 + 67.617(length)</b>, where weight is in kilograms and length is in meters.</p>
+<p><b>(b)</b> For each additional 1 meter of length, the predicted weight of a wolf increases by 67.617 kg. (Since the lengths only span about half a meter, you could also say: for each additional 0.1 m, predicted weight increases by about 6.76 kg.)</p>
+<p><b>(c)</b> No. The intercept would be the predicted weight of a wolf with a length of 0 m, which is −47.851 kg. A length of 0 m is far outside the observed lengths (1.05–1.54 m), and a negative weight is impossible.</p>
+<p><b>(d)</b> About 93.3% of the variation in wolf weight is explained by the linear relationship with wolf length.</p>
+<p><b>(e)</b> predicted weight = −47.851 + 67.617(1.17) = 31.26 kg. Residual = 33.1 − 31.26 = <b>1.84 kg</b>. This wolf’s actual weight was 1.84 kg more than the weight predicted by the regression line for a wolf 1.17 m long.</p>`,
+check:[`(a) Used “predicted” (or ŷ) and defined weight and length with units`,`(b) Said “predicted weight increases by 67.617 kg” for each additional 1 m`,`(c) Explained that x = 0 is outside the data AND/OR the predicted weight is negative`,`(d) Said “variation in weight explained by the linear relationship with length”`,`(e) Calculated actual − predicted ≈ 1.84 kg`,`(e) Interpreted as “more than predicted” in context`]}
+]}
+];
+
+/* ===================== QUICK REFERENCE ===================== */
+const REF=[
+['Describe a scatterplot',`<ul><li><b>Direction</b> — positive / negative</li><li><b>Unusual features</b> — points off the pattern, clusters</li><li><b>Form</b> — linear / non-linear</li><li><b>Strength</b> — strong / moderate / weak</li><li><b>Context!</b> Name both variables. Use “tend to.”</li><li>x-axis = explanatory, y-axis = response</li></ul>`],
+['Correlation r',`<ul><li>Strength and direction of a <b>linear</b> association</li><li>−1 ≤ r ≤ 1; unit-free</li><li>r = 0 → no <em>linear</em> association</li><li>|r| near 1 ≠ linear model is appropriate</li><li>Correlation ≠ causation</li><li>r = ±√(r²), sign matches the slope</li></ul>`],
+['Regression model',`<ul><li><b>ŷ = a + bx</b> (ŷ = predicted y)</li><li>Write with variable names and “predicted”</li><li>LSRL minimizes Σ(residual)²</li><li>LSRL passes through (<span class="xb">x</span>, <span class="xb">y</span>)</li><li><b>Interpolation</b>: x within the data’s range</li><li><b>Extrapolation</b>: x beyond it — less reliable</li></ul>`],
+['Residuals',`<ul><li><b>residual = y − ŷ</b> (actual − predicted)</li><li>Positive → model <b>underpredicts</b></li><li>Negative → model <b>overpredicts</b></li><li>actual = predicted + residual</li><li>Residual plot: residual vs. x (or ŷ)</li><li>Random scatter → linear is appropriate</li><li>Curved → linear not the best model</li></ul>`],
+['Interpretation templates',`<ul><li><b>Slope:</b> For each additional [1 unit of x], the predicted [y] increases/decreases by [b units].</li><li><b>Intercept:</b> When [x] = 0, the predicted [y] is [a units].</li><li><b>r:</b> There is a [strength], [direction], linear association between [x] and [y].</li><li><b>r²:</b> About [r²]% of the variation in [y] is explained by the linear relationship with [x].</li><li><b>Residual:</b> The actual [y] was [|residual| units] more/less than predicted by the line for [x = value].</li></ul>`],
+['TI-84 steps',`<ul><li>STAT → EDIT: x in L1, y in L2</li><li>MODE → STAT DIAGNOSTICS: ON (older TI-84: CATALOG → DiagnosticOn)</li><li>STAT → CALC → 8: LinReg(a+bx)</li><li>Scatterplot: 2nd Y= (STAT PLOT), Type: scatter</li><li>Residual plot: Ylist = RESID (2nd STAT → NAMES)</li><li>Report results in context, not “calculator speak”</li></ul>`]
+];
+
+/* ===================== STATE ===================== */
+const KEY='apstats-u5-hub-v1';
+let store={mc:{},frq:{}};
+try{ const raw=localStorage.getItem(KEY); if(raw) store=Object.assign(store,JSON.parse(raw)); }catch(e){}
+function save(){ try{ localStorage.setItem(KEY,JSON.stringify(store)); }catch(e){} }
+SECTIONS.forEach(s=>{ s.mc.forEach((q,i)=>q.id=`${s.id}-mc${i+1}`); s.frq.forEach((q,i)=>q.id=`${s.id}-frq${i+1}`); });
+const ALL_MC=SECTIONS.flatMap(s=>s.mc.map(q=>Object.assign({sec:s},q)));
+let current=SECTIONS[0].id, sub='review';
+try{ const c=localStorage.getItem(KEY+'-cur'); if(c&&SECTIONS.find(s=>s.id===c)) current=c; }catch(e){}
+
+/* ===================== RENDERING ===================== */
+const L='ABCDEFG';
+function figHTML(name){ return name&&FIG[name]?`<figure>${FIG[name]()}</figure>`:''; }
+function fillFigs(html){ return html.replace(/\{\{(\w+)\}\}/g,(m,n)=>figHTML(n)); }
+
+function mcCard(q,num,opts){
+  opts=opts||{};
+  const el=document.createElement('div'); el.className='q';
+  el.innerHTML=`<div class="qh"><span>Question ${num}</span><span class="tag">${opts.tag||''}</span></div><p class="stem">${q.q}</p>${figHTML(q.fig)}<div class="opts"></div><div class="fb"></div><div class="row" style="display:none"><button class="btn">Try again</button></div>`;
+  const box=el.querySelector('.opts'), fb=el.querySelector('.fb'), row=el.querySelector('.row');
+  const btns=q.o.map((t,i)=>{ const b=document.createElement('button'); b.className='opt'; b.innerHTML=`<span class="L">${L[i]}</span><span>${t}</span>`; b.onclick=()=>pick(i,true); box.appendChild(b); return b; });
+  function pick(i,user){
+    btns.forEach((b,j)=>{ b.disabled=true; b.classList.toggle('right',j===q.a); b.classList.toggle('wrong',j===i&&i!==q.a); });
+    const ok=i===q.a;
+    fb.className='fb show '+(ok?'ok':'no');
+    fb.innerHTML=`<b>${ok?'Correct!':'Not quite — the answer is '+L[q.a]+'.'}</b> ${q.e}`;
+    row.style.display='flex';
+    if(user&&opts.onAnswer) opts.onAnswer(ok,i);
+  }
+  row.querySelector('button').onclick=()=>{ btns.forEach(b=>{b.disabled=false;b.classList.remove('right','wrong');}); fb.className='fb'; row.style.display='none'; if(opts.onReset) opts.onReset(); };
+  if(opts.prior!=null) pick(opts.prior,false);
+  return el;
+}
+function frqCard(q,num){
+  const el=document.createElement('div'); el.className='q';
+  const saved=(store.frq[q.id]||'');
+  el.innerHTML=`<div class="qh"><span>Free Response ${num}</span><span class="tag">FRQ practice</span></div><p class="stem">${fillFigs(q.q)}</p>${figHTML(q.fig)}
+  <label style="font-size:14px;font-weight:600;display:block;margin:8px 0 4px">Your response (saved in this browser)</label><textarea></textarea>
+  <div class="row"><button class="btn solid">Show model answer</button></div>
+  <div class="model"><h4>Model response</h4>${fillFigs(q.model)}<h4 style="margin-top:12px">Check your response</h4><div class="check">${q.check.map(c=>`<label><input type="checkbox"> <span>${c}</span></label>`).join('')}</div></div>`;
+  const ta=el.querySelector('textarea'); ta.value=saved;
+  let t; ta.addEventListener('input',()=>{ clearTimeout(t); t=setTimeout(()=>{ store.frq[q.id]=ta.value; save(); },400); });
+  const m=el.querySelector('.model'), b=el.querySelector('.row button');
+  b.onclick=()=>{ const on=m.classList.toggle('show'); b.textContent=on?'Hide model answer':'Show model answer'; };
+  return el;
+}
+
+function secCounts(s){ const total=s.mc.length; const done=s.mc.filter(q=>store.mc[q.id]&&store.mc[q.id].ok).length; return {done,total}; }
+function renderOverall(){
+  let d=0,t=0; SECTIONS.forEach(s=>{const c=secCounts(s); d+=c.done; t+=c.total;});
+  document.getElementById('ovText').textContent=`${d} of ${t} practice questions correct`;
+  document.getElementById('ovBar').style.width=(t?d/t*100:0)+'%';
+}
+function renderList(){
+  const list=document.getElementById('topicList'); list.innerHTML='';
+  const sel=document.getElementById('pick'); sel.innerHTML='';
+  SECTIONS.forEach(s=>{
+    const c=secCounts(s);
+    const b=document.createElement('button'); b.className='topic'; b.setAttribute('aria-current',s.id===current);
+    b.innerHTML=`<span class="t">${s.title}</span><span class="m">${s.ced.split('·')[0].replace('CED ','')}<span class="mini"><i style="width:${c.done/c.total*100}%"></i></span>${c.done}/${c.total}</span>`;
+    b.onclick=()=>{ current=s.id; sub='review'; try{localStorage.setItem(KEY+'-cur',current);}catch(e){} renderList(); renderPanel(); document.getElementById('topicPanel').scrollIntoView({behavior:'smooth',block:'start'}); };
+    list.appendChild(b);
+    const o=document.createElement('option'); o.value=s.id; o.textContent=`${s.title} (${c.done}/${c.total})`; if(s.id===current) o.selected=true; sel.appendChild(o);
+  });
+  renderOverall();
+}
+document.getElementById('pick').onchange=e=>{ current=e.target.value; sub='review'; try{localStorage.setItem(KEY+'-cur',current);}catch(err){} renderList(); renderPanel(); };
+
+function renderPanel(){
+  const s=SECTIONS.find(x=>x.id===current), p=document.getElementById('topicPanel');
+  p.innerHTML=`<h2>${s.title}</h2><p class="ced">${s.ced}</p>
+  <div class="subtabs" role="tablist"><button data-sub="review" aria-selected="${sub==='review'}">Concept Review</button><button data-sub="practice" aria-selected="${sub==='practice'}">Practice (${s.mc.length+s.frq.length})</button></div>
+  <div id="subBody"></div>`;
+  p.querySelectorAll('.subtabs button').forEach(b=>b.onclick=()=>{ sub=b.dataset.sub; renderPanel(); });
+  const body=p.querySelector('#subBody');
+  if(sub==='review'){
+    body.innerHTML=`<div class="review">${fillFigs(s.review)}</div><div class="row" style="margin-top:20px"><button class="btn solid" id="goPrac">Practice this topic →</button></div>`;
+    body.querySelector('#goPrac').onclick=()=>{ sub='practice'; renderPanel(); p.scrollIntoView({behavior:'smooth',block:'start'}); };
+  } else {
+    const head=document.createElement('div'); head.className='row'; head.style.margin='0 0 14px';
+    head.innerHTML=`<span style="color:var(--muted);font-size:14px">Your first answer to each question is saved. Use “Try again” to redo one.</span><span style="flex:1"></span><button class="btn">Reset this topic</button>`;
+    head.querySelector('button').onclick=()=>{ s.mc.forEach(q=>delete store.mc[q.id]); save(); renderList(); renderPanel(); };
+    body.appendChild(head);
+    s.mc.forEach((q,i)=>{
+      const pr=store.mc[q.id];
+      body.appendChild(mcCard(q,i+1,{tag:'Multiple choice',prior:pr?pr.pick:null,
+        onAnswer:(ok,pick)=>{ store.mc[q.id]={ok,pick}; save(); renderList(); },
+        onReset:()=>{ delete store.mc[q.id]; save(); renderList(); }}));
+    });
+    s.frq.forEach((q,i)=>body.appendChild(frqCard(q,i+1)));
+    const nxt=SECTIONS[SECTIONS.indexOf(s)+1];
+    if(nxt){ const r=document.createElement('div'); r.className='row'; r.innerHTML=`<button class="btn solid">Next topic: ${nxt.title} →</button>`; r.querySelector('button').onclick=()=>{ current=nxt.id; sub='review'; renderList(); renderPanel(); p.scrollIntoView({behavior:'smooth',block:'start'}); }; body.appendChild(r); }
+  }
+}
+
+/* ===================== MIXED PRACTICE ===================== */
+let mxSet=[], mxAns={};
+function newMixed(){
+  const pool=[...ALL_MC]; for(let i=pool.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [pool[i],pool[j]]=[pool[j],pool[i]]; }
+  mxSet=pool.slice(0,10); mxAns={}; renderMixed();
+}
+function renderMixed(){
+  const list=document.getElementById('mxList'); list.innerHTML='';
+  mxSet.forEach((q,i)=>list.appendChild(mcCard(q,i+1,{tag:q.sec.title,
+    onAnswer:ok=>{ mxAns[i]=ok; updMx(); }, onReset:()=>{ delete mxAns[i]; updMx(); }})));
+  updMx();
+}
+function updMx(){
+  const n=Object.keys(mxAns).length, c=Object.values(mxAns).filter(Boolean).length;
+  document.getElementById('mxScore').textContent=`${c} / 10`;
+  document.getElementById('mxMsg').textContent = n<10 ? `${n} of 10 answered.` : (c>=9?'Excellent — you are ready!':c>=7?'Solid work. Review the topics you missed.':'Keep going — revisit the Concept Review for the topics you missed.');
+}
+document.getElementById('mxNew').onclick=newMixed;
+
+/* ===================== REGRESSION CALCULATOR ===================== */
+let REG=null;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+function parseList(raw){ const toks=raw.trim().split(/[\s,;]+/).filter(Boolean); return {toks,nums:toks.map(Number)}; }
+function loadWolf(){ document.getElementById('rx').value=D.wolf.map(p=>p[0]).join(', '); document.getElementById('ry').value=D.wolf.map(p=>p[1]).join(', '); document.getElementById('rxn').value='length (m)'; document.getElementById('ryn').value='weight (kg)'; }
+function regCalc(){
+  const err=document.getElementById('rErr'), out=document.getElementById('rOut');
+  err.textContent=''; out.innerHTML=''; document.getElementById('rEq').innerHTML=''; document.getElementById('rScat').innerHTML=''; document.getElementById('rRes').innerHTML=''; REG=null;
+  const X=parseList(document.getElementById('rx').value), Y=parseList(document.getElementById('ry').value);
+  const bad=[...X.toks.filter((t,i)=>!isFinite(X.nums[i])),...Y.toks.filter((t,i)=>!isFinite(Y.nums[i]))];
+  if(bad.length){ err.textContent=`These entries aren’t numbers: ${bad.slice(0,5).map(esc).join(', ')}`; return; }
+  if(X.nums.length!==Y.nums.length){ err.textContent=`The lists need the same length — x has ${X.nums.length} values and y has ${Y.nums.length}.`; return; }
+  if(X.nums.length<3){ err.textContent='Enter at least 3 ordered pairs.'; return; }
+  if(new Set(X.nums).size<2){ err.textContent='The x values can’t all be the same.'; return; }
+  if(new Set(Y.nums).size<2){ err.textContent='The y values can’t all be the same (r is undefined).'; return; }
+  const xs=X.nums, ys=Y.nums, f=linreg(xs,ys);
+  const xn=esc(document.getElementById('rxn').value.trim()||'x'), yn=esc(document.getElementById('ryn').value.trim()||'y');
+  REG={f,xs,ys,xn,yn};
+  const rows=[['n',f.n],['<span class="xb">x</span> (mean of x)',fmt(f.mx)],['<span class="xb">y</span> (mean of y)',fmt(f.my)],['Slope, b',r2d(f.b,4)],['y-intercept, a',r2d(f.a,4)],['Correlation, r',r2d(f.r,4)],['r²',r2d(f.r*f.r,4)]];
+  out.innerHTML=`<table>${rows.map(x=>`<tr><td>${x[0]}</td><td>${x[1]}</td></tr>`).join('')}</table>`;
+  const strength=Math.abs(f.r)>=0.8?'strong':Math.abs(f.r)>=0.5?'moderate':'weak', dir=f.r>0?'positive':'negative';
+  document.getElementById('rEq').innerHTML=`<div class="callout tip"><strong>In context</strong>predicted ${yn} = ${r2d(f.a,3)} ${f.b<0?'−':'+'} ${r2d(Math.abs(f.b),3)}(${xn})<br><br><b>Slope:</b> For each additional 1 unit of ${xn}, the predicted ${yn} ${f.b<0?'decreases':'increases'} by ${r2d(Math.abs(f.b),3)}.<br><b>r²:</b> About ${r2d(f.r*f.r*100,1)}% of the variation in ${yn} is explained by the linear relationship with ${xn}.<br><b>r = ${r2d(f.r,3)}:</b> a ${strength}, ${dir} linear association — <em>if</em> the scatterplot and residual plot show a linear form.</div>`;
+  const ax=niceAxis(xs), ay=niceAxis(ys), ar=niceAxis(f.res.concat([0]),5);
+  document.getElementById('rScat').innerHTML=scatter({pts:xs.map((x,i)=>[x,ys[i]]),line:{a:f.a,b:f.b},center:[f.mx,f.my],xmin:ax.min,xmax:ax.max,xtick:ax.step,ymin:ay.min,ymax:ay.max,ytick:ay.step,xlabel:xn,ylabel:yn});
+  document.getElementById('rRes').innerHTML=scatter({pts:xs.map((x,i)=>[x,f.res[i]]),zero:true,xmin:ax.min,xmax:ax.max,xtick:ax.step,ymin:ar.min,ymax:ar.max,ytick:ar.step,xlabel:xn,ylabel:'Residual',aria:'Residual plot'});
+}
+document.getElementById('rGo').onclick=regCalc;
+document.getElementById('rWolf').onclick=()=>{ loadWolf(); regCalc(); };
+document.getElementById('rClear').onclick=()=>{ ['rx','ry'].forEach(id=>document.getElementById(id).value=''); ['rOut','rEq','rScat','rRes'].forEach(id=>document.getElementById(id).innerHTML=''); document.getElementById('pOut').style.display='none'; REG=null; };
+document.getElementById('pGo').onclick=()=>{
+  const o=document.getElementById('pOut'); o.style.display='block';
+  if(!REG){ o.innerHTML='Calculate the LSRL first.'; return; }
+  const xv=document.getElementById('px').value, yv=document.getElementById('py').value;
+  if(xv===''||!isFinite(+xv)){ o.innerHTML='Enter an x value.'; return; }
+  const {f,xs,xn,yn}=REG, x=+xv, yhat=f.a+f.b*x, lo=Math.min(...xs), hi=Math.max(...xs);
+  let s=`predicted ${yn} = ${r2d(f.a,3)} ${f.b<0?'−':'+'} ${r2d(Math.abs(f.b),3)}(${fmt(x)}) = <b>${r2d(yhat,3)}</b>`;
+  s+= (x<lo||x>hi) ? `<br>⚠️ <b>Extrapolation:</b> ${fmt(x)} is outside the x-values in the data (${fmt(lo)} to ${fmt(hi)}), so this prediction is less reliable.` : `<br>Interpolation: ${fmt(x)} is within the x-values in the data (${fmt(lo)} to ${fmt(hi)}).`;
+  if(yv!==''&&isFinite(+yv)){ const res=+yv-yhat; s+=`<br><br>residual = actual − predicted = ${fmt(+yv)} − ${r2d(yhat,3)} = <b>${r2d(res,3)}</b><br>The actual ${yn} was ${r2d(Math.abs(res),3)} ${res>=0?'more':'less'} than predicted by the line for ${xn} = ${fmt(x)} (the model ${res>=0?'underpredicts':'overpredicts'}).`; }
+  o.innerHTML=s;
+};
+
+/* ===================== GUESS THE CORRELATION ===================== */
+let gR=0, gDone=false, gTot=0, gHit=0;
+function randn(){ let u=0,v=0; while(!u)u=Math.random(); while(!v)v=Math.random(); return Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v); }
+function newGuess(){
+  const target=Math.random()*2-1, n=40, xs=[], ys=[];
+  for(let i=0;i<n;i++){ xs.push(Math.random()*10); }
+  const mx=xs.reduce((a,b)=>a+b,0)/n, sx=Math.sqrt(xs.reduce((a,b)=>a+(b-mx)**2,0)/n);
+  xs.forEach(x=>ys.push(target*(x-mx)/sx+Math.sqrt(1-target*target)*randn()));
+  const ay=niceAxis(ys,5);
+  gR=linreg(xs,ys).r; gDone=false;
+  document.getElementById('gFig').innerHTML=scatter({pts:xs.map((x,i)=>[x,ys[i]]),xmin:0,xmax:10,xtick:2,ymin:ay.min,ymax:ay.max,ytick:ay.step,xlabel:'x',ylabel:'y',aria:'Random scatterplot'});
+  document.getElementById('gOut').style.display='none';
+}
+const gSl=document.getElementById('gSl');
+gSl.oninput=()=>{ document.getElementById('gVal').textContent=(+gSl.value).toFixed(2); };
+document.getElementById('gGo').onclick=()=>{
+  if(gDone) return; gDone=true; gTot++;
+  const g=+gSl.value, d=Math.abs(g-gR); if(d<=0.10) gHit++;
+  const o=document.getElementById('gOut'); o.style.display='block';
+  o.innerHTML=`Actual r = <b>${gR.toFixed(2)}</b>. Your guess was off by ${d.toFixed(2)}. ${d<=0.05?'Excellent eye!':d<=0.10?'Nice — within 0.10.':d<=0.25?'Close. Check direction first, then how tightly the points hug a line.':'Keep practicing — look at the direction first, then the strength.'}`;
+  document.getElementById('gScore').textContent=`${gHit} / ${gTot}`;
+};
+document.getElementById('gNew').onclick=newGuess;
+
+/* ===================== TABS / INIT ===================== */
+document.querySelectorAll('nav.tabs button').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('nav.tabs button').forEach(x=>x.setAttribute('aria-selected',x===b));
+  document.querySelectorAll('.view').forEach(v=>v.classList.toggle('on',v.id==='v-'+b.dataset.view));
+  if(b.dataset.view==='mixed'&&!mxSet.length) newMixed();
+  if(b.dataset.view==='calc'&&!REG){ if(!document.getElementById('rx').value) loadWolf(); regCalc(); }
+  if(b.dataset.view==='guess'&&!document.getElementById('gFig').innerHTML) newGuess();
+});
+document.getElementById('refGrid').innerHTML=REF.map(r=>`<div class="panel"><h3>${r[0]}</h3>${r[1]}</div>`).join('');
+renderList(); renderPanel();
+</script>
+</body>
+</html>
